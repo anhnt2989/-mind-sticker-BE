@@ -59,7 +59,7 @@ public class NoteController {
         Note note = new Note(createNoteForm.getTitle(), createNoteForm.getContent());
         note.setWriter(user);
         noteService.save(note);
-        Note noteTitle = noteService.findByTitle(createNoteForm.getTitle());
+//        Note noteTitle = noteService.findByTitle(createNoteForm.getTitle());
         return new ResponseEntity<>(new ResponseMessage("Note created successfully"), HttpStatus.OK);
     }
 
@@ -69,9 +69,9 @@ public class NoteController {
     public ResponseEntity<List<Note>> listAllNotes() {
         List<Note> notes = noteService.findAll();
         if (notes.isEmpty()) {
-            return new ResponseEntity<List<Note>>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<List<Note>>(notes, HttpStatus.OK);
+        return new ResponseEntity<>(notes, HttpStatus.OK);
     }
 
     //Sửa 1 note với id
@@ -84,14 +84,14 @@ public class NoteController {
 
         if (currentNote == null) {
             System.out.println("Note with id " + id + " not found");
-            return new ResponseEntity<Note>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         currentNote.setTitle(note.getTitle());
         currentNote.setContent(note.getContent());
 
         noteService.save(currentNote);
-        return new ResponseEntity<Note>(currentNote, HttpStatus.OK);
+        return new ResponseEntity<>(currentNote, HttpStatus.OK);
     }
 
     //Xóa 1 note với id
