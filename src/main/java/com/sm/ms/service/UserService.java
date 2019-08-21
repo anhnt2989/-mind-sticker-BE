@@ -17,5 +17,5 @@ public interface UserService {
 
     User findByEmailIgnoreCase(String email);
 
-    User save(User user);
+    void save(User user);
 }
