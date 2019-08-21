@@ -77,7 +77,7 @@ public class NoteController {
     //Sửa 1 note với id
     @RequestMapping(value = "/note/{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-    public ResponseEntity<Note> updateNote(@PathVariable("id") long id, @RequestBody Note note) {
+    public ResponseEntity<Note> updateNote(@PathVariable("id") Long id, @RequestBody Note note) {
         System.out.println("Updating Note " + id);
 
         Note currentNote = noteService.findById(id);
@@ -92,5 +92,14 @@ public class NoteController {
 
         noteService.save(currentNote);
         return new ResponseEntity<Note>(currentNote, HttpStatus.OK);
+    }
+
+    //Xóa 1 note với id
+    @RequestMapping(value = "/note/{id}/delete", method = RequestMethod.DELETE)
+    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+    public void deleteNote(@PathVariable("id") Long id) {
+        Note currentNote = noteService.findById(id);
+
+        noteService.remove(currentNote.getId());
     }
 }
