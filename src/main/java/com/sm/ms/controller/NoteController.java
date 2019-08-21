@@ -43,7 +43,7 @@ public class NoteController {
     NoteServiceImpl noteService;
 
     //Tạo note mới với chỉ quyền user - PM - ADMIN
-    @PostMapping(value = "create-note", consumes = "multipart/form-data")
+    @PostMapping(value = "/create-note", consumes = "multipart/form-data")
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<?> createNote(@ModelAttribute CreateNoteForm createNoteForm, HttpServletRequest request) {
         String jwts = authenticationJwtTokenFilter.getJwt(request);
@@ -75,7 +75,7 @@ public class NoteController {
     }
 
     //Sửa 1 note với id
-    @RequestMapping(value = "/notes/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/note/{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<Note> updateNote(@PathVariable("id") long id, @RequestBody Note note) {
         System.out.println("Updating Note " + id);
