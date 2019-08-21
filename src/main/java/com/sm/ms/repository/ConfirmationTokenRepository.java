@@ -1,4 +1,8 @@
 package com.sm.ms.repository;
 
-public class ConfirmationTokenRepository {
+import com.sm.ms.model.ConfirmationToken;
+import org.springframework.data.repository.CrudRepository;
+
+public interface ConfirmationTokenRepository extends CrudRepository<ConfirmationToken, String> {
+    ConfirmationToken findByConfirmationToken(String confirmationToken);
 }
