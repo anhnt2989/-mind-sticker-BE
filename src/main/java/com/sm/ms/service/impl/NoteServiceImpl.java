@@ -6,14 +6,26 @@ import com.sm.ms.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class NoteServiceImpl implements NoteService {
     @Autowired
     NoteRepository noteRepository;
 
     @Override
-    public Note save(Note note) {
-        return noteRepository.save(note);
+    public List<Note> findAll() {
+        return noteRepository.findAll();
+    }
+
+    @Override
+    public void remove(Long id) {
+        noteRepository.deleteById(id);
+    }
+
+    @Override
+    public void save(Note note) {
+        noteRepository.save(note);
     }
 
     @Override

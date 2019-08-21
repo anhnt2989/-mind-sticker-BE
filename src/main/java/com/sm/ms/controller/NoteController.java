@@ -16,11 +16,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -44,6 +42,7 @@ public class NoteController {
     @Autowired
     NoteServiceImpl noteService;
 
+    //Tạo note mới với chỉ quyền user - PM - ADMIN
     @PostMapping(value = "create-note", consumes = "multipart/form-data")
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<?> createNote(@ModelAttribute CreateNoteForm createNoteForm, HttpServletRequest request) {
@@ -61,6 +60,37 @@ public class NoteController {
         note.setWriter(user);
         noteService.save(note);
         Note noteTitle = noteService.findByTitle(createNoteForm.getTitle());
-        return new ResponseEntity<>(new ResponseMessage("Publish House successfully"), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage("Note created successfully"), HttpStatus.OK);
+    }
+
+    //Hiển thị all notes (không cần login)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ResponseEntity<List<Note>> listAllNotes() {
+        List<Note> notes = noteService.findAll();
+        if (notes.isEmpty()) {
+            return new ResponseEntity<List<Note>>(HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
+        }
+        return new ResponseEntity<List<Note>>(notes, HttpStatus.OK);
+    }
+
+    //Sửa 1 note với id
+    @RequestMapping(value = "/notes/{id}", method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+    public ResponseEntity<Note> updateNote(@PathVariable("id") long id, @RequestBody Note note) {
+        System.out.println("Updating Note " + id);
+
+        Note currentNote = noteService.findById(id);
+
+        if (currentNote == null) {
+            System.out.println("Note with id " + id + " not found");
+            return new ResponseEntity<Note>(HttpStatus.NOT_FOUND);
+        }
+
+        currentNote.setTitle(note.getTitle());
+        currentNote.setContent(note.getContent());
+//        currentNote.setId(note.getId());
+
+        noteService.save(currentNote);
+        return new ResponseEntity<Note>(currentNote, HttpStatus.OK);
     }
 }
