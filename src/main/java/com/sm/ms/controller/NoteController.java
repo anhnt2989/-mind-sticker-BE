@@ -42,7 +42,7 @@ public class NoteController {
     @Autowired
     NoteServiceImpl noteService;
 
-    //Tạo note mới với chỉ quyền user - PM - ADMIN
+    //Tạo note mới với quyền user - PM - ADMIN
     @PostMapping(value = "/create-note", consumes = "multipart/form-data")
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<?> createNote(@ModelAttribute CreateNoteForm createNoteForm, HttpServletRequest request) {
@@ -63,7 +63,7 @@ public class NoteController {
         return new ResponseEntity<>(new ResponseMessage("Note created successfully"), HttpStatus.OK);
     }
 
-    //Hiển thị all notes (phải cần login mới biết note nào của user nào)
+    //Hiển thị all notes với quyền user - PM - ADMIN
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<List<Note>> listAllNotes() {
@@ -74,7 +74,7 @@ public class NoteController {
         return new ResponseEntity<>(notes, HttpStatus.OK);
     }
 
-    //Sửa 1 note với id
+    //Sửa 1 note với quyền user - PM - ADMIN
     @RequestMapping(value = "/note/{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<Note> updateNote(@PathVariable("id") Long id, @RequestBody Note note) {
@@ -94,7 +94,7 @@ public class NoteController {
         return new ResponseEntity<>(currentNote, HttpStatus.OK);
     }
 
-    //Xóa 1 note với id
+    //Xóa 1 note với quyền user - PM - ADMIN
     @RequestMapping(value = "/note/{id}/delete", method = RequestMethod.DELETE)
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public void deleteNote(@PathVariable("id") Long id) {
