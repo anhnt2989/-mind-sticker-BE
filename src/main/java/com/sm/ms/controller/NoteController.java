@@ -63,12 +63,13 @@ public class NoteController {
         return new ResponseEntity<>(new ResponseMessage("Note created successfully"), HttpStatus.OK);
     }
 
-    //Hiển thị all notes (không cần login)
+    //Hiển thị all notes (phải cần login mới biết note nào của user nào)
     @RequestMapping(value = "/", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<List<Note>> listAllNotes() {
         List<Note> notes = noteService.findAll();
         if (notes.isEmpty()) {
-            return new ResponseEntity<List<Note>>(HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
+            return new ResponseEntity<List<Note>>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<List<Note>>(notes, HttpStatus.OK);
     }
@@ -88,7 +89,6 @@ public class NoteController {
 
         currentNote.setTitle(note.getTitle());
         currentNote.setContent(note.getContent());
-//        currentNote.setId(note.getId());
 
         noteService.save(currentNote);
         return new ResponseEntity<Note>(currentNote, HttpStatus.OK);
