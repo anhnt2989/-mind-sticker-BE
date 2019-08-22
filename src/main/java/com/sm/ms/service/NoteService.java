@@ -2,6 +2,7 @@ package com.sm.ms.service;
 
 import com.sm.ms.model.Note;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 public interface NoteService {
@@ -9,7 +10,7 @@ public interface NoteService {
 
     List<Note> findAll();
 
-    Note findById(Long id);
+    Note findById(Long id) throws EntityNotFoundException;
 
     Note findByTitle(String title);
 

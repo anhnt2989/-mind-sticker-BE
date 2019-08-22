@@ -18,4 +18,6 @@ public interface UserService {
     User findByEmailIgnoreCase(String email);
 
     void save(User user);
+
+    User findById(Long id);
 }

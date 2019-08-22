@@ -6,6 +6,7 @@ import com.sm.ms.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -29,8 +30,8 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public Note findById(Long id) {
-        return noteRepository.findById(id).get();
+    public Note findById(Long id) throws EntityNotFoundException {
+        return noteRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
