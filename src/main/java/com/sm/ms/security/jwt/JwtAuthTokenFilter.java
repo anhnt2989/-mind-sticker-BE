@@ -1,7 +1,6 @@
 package com.sm.ms.security.jwt;
 
 import com.sm.ms.security.services.UserDetailsServiceImpl;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
@@ -46,8 +45,7 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Can NOT set user authentication -> Message: {}", e);
         }
 
