@@ -69,8 +69,8 @@ public class AuthRestAPIs {
         return ResponseEntity.ok(jwtResponse);
     }
 
-    @PostMapping(value = "/signup", consumes = "multipart/form-data")
-    public ResponseEntity<?> registerUser(@Valid @ModelAttribute SignUpForm signUpRequest) {
+    @PostMapping(value = "/signup")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpForm signUpRequest) {
         System.out.println(signUpRequest);
         if (userService.existsByUsername(signUpRequest.getUsername())) {
             return new ResponseEntity<>(new ResponseMessage("Fail -> Username is already taken!"),
@@ -93,14 +93,14 @@ public class AuthRestAPIs {
                 signUpRequest.getBirthday(), signUpRequest.getAddress(),
                 signUpRequest.getPhoneNumber(), passwordEncoder.encode(signUpRequest.getPassword()));
         user.setEnabled(false);
-        String avatarFileName = signUpRequest.getAvatar().getOriginalFilename();
-        user.setAvatarFileName(avatarFileName);
+//        String avatarFileName = signUpRequest.getAvatar().getOriginalFilename();
+//        user.setAvatarFileName(avatarFileName);
 
-        Set<Role> roles = new HashSet<>();
-        Role userRole = roleService.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-        roles.add(userRole);
-        user.setRoles(roles);
+//        Set<Role> roles = new HashSet<>();
+//        Role userRole = roleService.findByName(RoleName.ROLE_USER)
+//                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+//        roles.add(userRole);
+//        user.setRoles(roles);
 
 //        String saveLocation = UPLOAD_LOCATION + user.getUsername() + "/avatar/";
 //        new File(saveLocation).mkdirs();

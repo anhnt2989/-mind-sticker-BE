@@ -7,15 +7,15 @@ import javax.validation.constraints.*;
 import java.util.Date;
 
 public class SignUpForm {
-    @NotBlank
+//    @NotBlank
     @Size(min = 3, max = 50)
     private String name;
 
-    @NotBlank
+//    @NotBlank
     @Size(min = 3, max = 50)
     private String username;
 
-    @NotBlank
+//    @NotBlank
     @Size(max = 60)
     @Email
     private String email;
@@ -29,8 +29,9 @@ public class SignUpForm {
     @Pattern(regexp = "0([0-9]{9,10})")
     private String phoneNumber;
 
-    @NotBlank
-    @Size(min = 6, max = 40)
+    //Tính tổng số ky tự sau khi mã hóa
+//    @NotBlank
+    @Size(min = 6, max = 50)
     private String password;
 
     private MultipartFile avatar;

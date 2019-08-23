@@ -22,7 +22,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class NoteController {
     @Autowired
     UserService userService;
