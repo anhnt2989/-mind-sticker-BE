@@ -43,7 +43,7 @@ public class NoteController {
     NoteServiceImpl noteService;
 
     //Tạo note mới với quyền user - PM - ADMIN
-    @PostMapping(value = "/create-note", consumes = "multipart/form-data")
+    @RequestMapping(value = "/create-note", method = RequestMethod.POST)
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<?> createNote(@ModelAttribute CreateNoteForm createNoteForm, HttpServletRequest request) {
         String jwts = authenticationJwtTokenFilter.getJwt(request);
@@ -59,7 +59,7 @@ public class NoteController {
         Note note = new Note(createNoteForm.getTitle(), createNoteForm.getContent());
         note.setWriter(user);
         noteService.save(note);
-//        Note noteTitle = noteService.findByTitle(createNoteForm.getTitle());
+        Note noteTitle = noteService.findByTitle(createNoteForm.getTitle());
         return new ResponseEntity<>(new ResponseMessage("Note created successfully"), HttpStatus.OK);
     }
 
@@ -77,9 +77,9 @@ public class NoteController {
     //Hiển thị all notes của 1 USER
     @RequestMapping(value = "/user/{id}/", method = RequestMethod.GET)
     @PreAuthorize("hasRole('USER') and hasAuthority('WRITER')")
-    public ResponseEntity<List<Note>> listAllNotesByUserId() {
-        List<Note> notes = noteService.findAllByUserId();
-        return null;
+    public ResponseEntity<List<Note>> listAllNotesByUserId(@PathVariable("id") Long id, @RequestBody User user) {
+        List<Note> notes = noteService.findAllByUserId(id);
+        return new ResponseEntity<>(notes, HttpStatus.OK);
     }
 
     //Sửa 1 note với quyền user - PM - ADMIN

@@ -35,7 +35,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> findAllByUserId() {
+    public List<Note> findAllByUserId(Long id) {
         return null;
     }
 
