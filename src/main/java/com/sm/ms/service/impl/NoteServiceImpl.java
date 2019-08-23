@@ -35,6 +35,11 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    public List<Note> findAllByUserId() {
+        return null;
+    }
+
+    @Override
     public Note findByTitle(String title) {
         return noteRepository.findByTitle(title);
     }

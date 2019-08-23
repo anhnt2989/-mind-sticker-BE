@@ -77,7 +77,8 @@ public class NoteController {
     //Hiển thị all notes của 1 USER
     @RequestMapping(value = "/user/{id}/", method = RequestMethod.GET)
     @PreAuthorize("hasRole('USER') and hasAuthority('WRITER')")
-    public ResponseEntity<Note> listAllNotesByUserId() {
+    public ResponseEntity<List<Note>> listAllNotesByUserId() {
+        List<Note> notes = noteService.findAllByUserId();
         return null;
     }
 
