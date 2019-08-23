@@ -43,25 +43,25 @@ public class NoteController {
     NoteServiceImpl noteService;
 
     //Tạo note mới với quyền user - PM - ADMIN
-    @RequestMapping(value = "/create-note", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-    public ResponseEntity<?> createNote(@ModelAttribute CreateNoteForm createNoteForm, HttpServletRequest request) {
-        String jwts = authenticationJwtTokenFilter.getJwt(request);
-        String userName = jwtProvider.getUserNameFromJwtToken(jwts);
-        User user;
-        try {
-            user = userService.findByUsername(userName).orElseThrow(
-                    () -> new UsernameNotFoundException("User Not Found with -> username or email : " + userName));
-        } catch (UsernameNotFoundException exception) {
-            return new ResponseEntity<>(new ResponseMessage(exception.getMessage()), HttpStatus.NOT_FOUND);
-        }
-
-        Note note = new Note(createNoteForm.getTitle(), createNoteForm.getContent());
-        note.setWriter(user);
-        noteService.save(note);
-        Note noteTitle = noteService.findByTitle(createNoteForm.getTitle());
-        return new ResponseEntity<>(new ResponseMessage("Note created successfully"), HttpStatus.OK);
-    }
+//    @RequestMapping(value = "/create-note", method = RequestMethod.POST, consumes = "multipart/form-data")
+//    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+//    public ResponseEntity<?> createNote(@ModelAttribute CreateNoteForm createNoteForm, HttpServletRequest request) {
+//        String jwts = authenticationJwtTokenFilter.getJwt(request);
+//        String userName = jwtProvider.getUserNameFromJwtToken(jwts);
+//        User user;
+//        try {
+//            user = userService.findByUsername(userName).orElseThrow(
+//                    () -> new UsernameNotFoundException("User Not Found with -> username or email : " + userName));
+//        } catch (UsernameNotFoundException exception) {
+//            return new ResponseEntity<>(new ResponseMessage(exception.getMessage()), HttpStatus.NOT_FOUND);
+//        }
+//
+//        Note note = new Note(createNoteForm.getTitle(), createNoteForm.getContent());
+//        note.setWriter(user);
+//        noteService.save(note);
+//        Note noteTitle = noteService.findByTitle(createNoteForm.getTitle());
+//        return new ResponseEntity<>(new ResponseMessage("Note created successfully"), HttpStatus.OK);
+//    }
 
     //Hiển thị all notes với quyền PM - ADMIN
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -75,16 +75,16 @@ public class NoteController {
     }
 
     //Hiển thị all notes của 1 USER
-    @RequestMapping(value = "/user/{id}/", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('USER') and hasAuthority('WRITER')")
-    public ResponseEntity<List<Note>> listAllNotesByUserId(@PathVariable("id") Long id, @RequestBody User user) {
-        List<Note> notes = noteService.findAllByUserId(id);
-        return new ResponseEntity<>(notes, HttpStatus.OK);
-    }
+//    @RequestMapping(value = "/user/{id}/", method = RequestMethod.GET)
+//    @PreAuthorize("hasRole('USER') and hasAuthority('WRITER')")
+//    public ResponseEntity<List<Note>> listAllNotesByUserId(@PathVariable("id") Long id, @RequestBody User user) {
+//        List<Note> notes = noteService.findAllByUserId(id);
+//        return new ResponseEntity<>(notes, HttpStatus.OK);
+//    }
 
-    //Sửa 1 note với quyền user - PM - ADMIN
+    //Sửa 1 note với quyền PM - ADMIN
     @RequestMapping(value = "/note/{id}", method = RequestMethod.PUT)
-    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<Note> updateNote(@PathVariable("id") Long id, @RequestBody Note note) {
         System.out.println("Updating Note " + id);
 
@@ -102,9 +102,9 @@ public class NoteController {
         return new ResponseEntity<>(currentNote, HttpStatus.OK);
     }
 
-    //Xóa 1 note với quyền user - PM - ADMIN
+    //Xóa 1 note với quyền PM - ADMIN
     @RequestMapping(value = "/note/{id}/delete", method = RequestMethod.DELETE)
-    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
     public void deleteNote(@PathVariable("id") Long id) {
         Note currentNote = noteService.findById(id);
 

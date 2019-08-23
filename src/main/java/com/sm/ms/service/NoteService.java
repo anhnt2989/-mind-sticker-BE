@@ -1,6 +1,7 @@
 package com.sm.ms.service;
 
 import com.sm.ms.model.Note;
+import com.sm.ms.model.User;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -16,5 +17,5 @@ public interface NoteService {
 
     void remove(Long id);
 
-    List<Note> findAllByUserId(Long id);
+    List<Note> findAllByUser(User user);
 }

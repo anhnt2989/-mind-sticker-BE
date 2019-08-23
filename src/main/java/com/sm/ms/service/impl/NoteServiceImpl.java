@@ -1,6 +1,7 @@
 package com.sm.ms.service.impl;
 
 import com.sm.ms.model.Note;
+import com.sm.ms.model.User;
 import com.sm.ms.repository.NoteRepository;
 import com.sm.ms.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,8 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> findAllByUserId(Long id) {
-        return null;
+    public List<Note> findAllByUser(User user) {
+        return noteRepository.findAllByWriter(user);
     }
 
     @Override
