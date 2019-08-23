@@ -63,15 +63,22 @@ public class NoteController {
         return new ResponseEntity<>(new ResponseMessage("Note created successfully"), HttpStatus.OK);
     }
 
-    //Hiển thị all notes với quyền user - PM - ADMIN
+    //Hiển thị all notes với quyền PM - ADMIN
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<List<Note>> listAllNotes() {
         List<Note> notes = noteService.findAll();
         if (notes.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(notes, HttpStatus.OK);
+    }
+
+    //Hiển thị all notes của 1 USER
+    @RequestMapping(value = "/user/{id}/", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('USER') and hasAuthority('WRITER')")
+    public ResponseEntity<Note> listAllNotesByUserId() {
+        return null;
     }
 
     //Sửa 1 note với quyền user - PM - ADMIN
