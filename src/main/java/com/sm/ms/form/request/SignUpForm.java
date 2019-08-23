@@ -7,15 +7,15 @@ import javax.validation.constraints.*;
 import java.util.Date;
 
 public class SignUpForm {
-//    @NotBlank
+    @NotBlank
     @Size(min = 3, max = 50)
     private String name;
 
-//    @NotBlank
+    @NotBlank
     @Size(min = 3, max = 50)
     private String username;
 
-//    @NotBlank
+    @NotBlank
     @Size(max = 60)
     @Email
     private String email;
@@ -30,7 +30,7 @@ public class SignUpForm {
     private String phoneNumber;
 
     //Tính tổng số ky tự sau khi mã hóa
-//    @NotBlank
+    @NotBlank
     @Size(min = 6, max = 50)
     private String password;
 
