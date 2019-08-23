@@ -103,9 +103,9 @@ public class WriterController {
             if (user.getId().equals(owner.getId())) {
                 note.setWriter(user);
                 noteService.save(note);
-                return new ResponseEntity<>(new ResponseMessage("Update House successfully"), HttpStatus.OK);
+                return new ResponseEntity<>(new ResponseMessage("Update Note successfully"), HttpStatus.OK);
             }
-            return new ResponseEntity<>(new ResponseMessage("You are not owner of this house"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ResponseMessage("You are not writer of this note"), HttpStatus.FORBIDDEN);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(new ResponseMessage(e.getMessage()), HttpStatus.NOT_FOUND);
         }
