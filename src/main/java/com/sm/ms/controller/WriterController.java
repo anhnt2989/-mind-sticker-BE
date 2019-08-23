@@ -1,5 +1,6 @@
 package com.sm.ms.controller;
 
+import com.sm.ms.form.request.CreateNoteForm;
 import com.sm.ms.form.response.ResponseMessage;
 import com.sm.ms.model.Note;
 import com.sm.ms.model.User;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,13 +43,23 @@ public class WriterController {
     @Autowired
     NoteService noteService;
 
-    @RequestMapping(value = "/create-note", method = RequestMethod.POST)
+    @RequestMapping(value = "/create-note", method = RequestMethod.POST, consumes = "multipart/form-data")
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-    public ResponseEntity<?> createNote(@ModelAttribute Note note, HttpServletRequest request) {
-        User user = userService.getUserByAuth();
+    public ResponseEntity<?> createNote(@ModelAttribute CreateNoteForm createNoteForm, HttpServletRequest request) {
+        User user;
+//        String jwts = authenticationJwtTokenFilter.getJwt(request);
+//        String userName = jwtProvider.getUserNameFromJwtToken(jwts);
+        try {
+            user = userService.getUserByAuth();
+        } catch (UsernameNotFoundException exception) {
+            return new ResponseEntity<>(new ResponseMessage(exception.getMessage()), HttpStatus.NOT_FOUND);
+        }
+
+        Note note = new Note(createNoteForm.getTitle(), createNoteForm.getContent());
         note.setWriter(user);
         noteService.save(note);
-        return new ResponseEntity<>(new ResponseMessage("Create Note successfully"), HttpStatus.OK);
+        Note noteTitle = noteService.findByTitle(createNoteForm.getTitle());
+        return new ResponseEntity<>(new ResponseMessage("Note created successfully"), HttpStatus.OK);
     }
 
     @RequestMapping(value = "list-notes", method = RequestMethod.GET)
