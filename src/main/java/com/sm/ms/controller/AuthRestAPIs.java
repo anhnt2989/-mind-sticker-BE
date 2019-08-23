@@ -92,7 +92,7 @@ public class AuthRestAPIs {
         User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
                 signUpRequest.getBirthday(), signUpRequest.getAddress(),
                 signUpRequest.getPhoneNumber(), passwordEncoder.encode(signUpRequest.getPassword()));
-        user.setEnabled(false);
+        user.setEnabled(true);
 //        String avatarFileName = signUpRequest.getAvatar().getOriginalFilename();
 //        user.setAvatarFileName(avatarFileName);
 
