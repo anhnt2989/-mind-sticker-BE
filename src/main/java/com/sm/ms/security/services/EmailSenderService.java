@@ -14,13 +14,12 @@ public class EmailSenderService {
     @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
 
-//    @Autowired
     private JavaMailSender javaMailSender;
 //
-//    @Autowired
-//    public EmailSenderService(JavaMailSender javaMailSender) {
-//        this.javaMailSender = javaMailSender;
-//    }
+    @Autowired
+    public EmailSenderService(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
 
     @Async
     public void sendEmail(SimpleMailMessage email) {
@@ -37,7 +36,7 @@ public class EmailSenderService {
         mailMessage.setSubject("Complete Registration!");
         mailMessage.setFrom("anhnt2989@gmail");
         mailMessage.setText("To confirm your account, please click here : "
-                + "http://localhost:8080/mind-sticker/api/auth/confirm-account?token=" + confirmationToken.getConfirmationToken());
+                + "http://localhost:8080/api/auth/confirm-account?token=" + confirmationToken.getConfirmationToken());
 
         sendEmail(mailMessage);
     }
@@ -52,7 +51,7 @@ public class EmailSenderService {
         mailMessage.setSubject("Complete Password Reset!");
         mailMessage.setFrom("anhnt2989@gmail");
         mailMessage.setText("To complete the password reset process, please click here : "
-                + "http://localhost:8080/mind-sticker/api/auth/confirm-reset?token=" + confirmationToken.getConfirmationToken());
+                + "http://localhost:8080/api/auth/confirm-reset?token=" + confirmationToken.getConfirmationToken());
 
         sendEmail(mailMessage);
     }

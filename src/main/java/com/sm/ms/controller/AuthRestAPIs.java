@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import com.sm.ms.form.request.LoginForm;
+import com.sm.ms.form.request.ResetPasswordForm;
 import com.sm.ms.form.request.SignUpForm;
 import com.sm.ms.form.response.JwtResponse;
 import com.sm.ms.form.response.ResponseMessage;
@@ -15,6 +16,7 @@ import com.sm.ms.model.RoleName;
 import com.sm.ms.model.User;
 import com.sm.ms.repository.ConfirmationTokenRepository;
 import com.sm.ms.security.jwt.JwtProvider;
+import com.sm.ms.security.services.EmailSenderService;
 import com.sm.ms.security.services.UserPrinciple;
 import com.sm.ms.service.RoleService;
 import com.sm.ms.service.UserService;
@@ -48,6 +50,9 @@ public class AuthRestAPIs {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmailSenderService emailSenderService;
 
     @Autowired
     JwtProvider jwtProvider;
@@ -107,7 +112,7 @@ public class AuthRestAPIs {
 //        multipartFileService.saveMultipartFile(saveLocation, signUpRequest.getAvatar(), avatarFileName);
 //
         userService.save(user);
-//        emailSenderService.sendEmailCreateUser(user);
+        emailSenderService.sendEmailCreateUser(user);
 
         return new ResponseEntity<>(new ResponseMessage("Please login your email to confirm"), HttpStatus.OK);
     }
@@ -125,6 +130,53 @@ public class AuthRestAPIs {
 
         } else {
             return new ResponseEntity<>(new ResponseMessage("Fail -> User's register occurred errors!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "/forgot-password")
+    public ResponseEntity<?> forgotUserPassword(@RequestBody String gmail) {
+        User existingUser = userService.findByEmailIgnoreCase(gmail);
+        if (existingUser != null) {
+            existingUser.setEnabled(true);
+            userService.save(existingUser);
+            emailSenderService.sendEmailForgotPassword(existingUser);
+            return new ResponseEntity<>(
+                    new ResponseMessage("Request to reset password received. Check your inbox for the reset link"),
+                    HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(new ResponseMessage("This email address does not exist!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "/confirm-reset")
+    public ResponseEntity<?> validateResetToken(@RequestParam("token") String confirmationToken) {
+        ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
+        if (token != null) {
+            User user = userService.findByEmailIgnoreCase(token.getUser().getEmail());
+            user.setEnabled(true);
+            userService.save(user);
+            return new ResponseEntity<>(new ResponseMessage("resetPassword"),
+                    HttpStatus.OK);
+
+        }
+        else {
+            return new ResponseEntity<>(new ResponseMessage("The link is invalid or broken!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "/reset-password")
+    public ResponseEntity<?>resetUserPassword( @RequestBody ResetPasswordForm resetPasswordForm){
+        if (resetPasswordForm.getGmail() !=null){
+            User tokenUser = userService.findByEmailIgnoreCase(resetPasswordForm.getGmail());
+            tokenUser.setPassword(passwordEncoder.encode(resetPasswordForm.getPassword()));
+            userService.save(tokenUser);
+            return new ResponseEntity<>(new ResponseMessage("Password successfully reset. You can now log in with the new credentials"),HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(new ResponseMessage("The link is invalid or broken!"),
                     HttpStatus.BAD_REQUEST);
         }
     }

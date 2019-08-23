@@ -65,7 +65,7 @@ public class NoteController {
 
     //Hiển thị all notes với quyền PM - ADMIN
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<List<Note>> listAllNotes() {
         List<Note> notes = noteService.findAll();
         if (notes.isEmpty()) {

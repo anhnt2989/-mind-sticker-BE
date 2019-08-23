@@ -43,7 +43,7 @@ public class WriterController {
     @Autowired
     NoteService noteService;
 
-    @RequestMapping(value = "/create-note", method = RequestMethod.POST, consumes = "multipart/form-data")
+    @RequestMapping(value = "create-note", method = RequestMethod.POST)
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<?> createNote(@ModelAttribute CreateNoteForm createNoteForm, HttpServletRequest request) {
         User user;
@@ -58,7 +58,7 @@ public class WriterController {
         Note note = new Note(createNoteForm.getTitle(), createNoteForm.getContent());
         note.setWriter(user);
         noteService.save(note);
-        Note noteTitle = noteService.findByTitle(createNoteForm.getTitle());
+//        Note noteTitle = noteService.findByTitle(createNoteForm.getTitle());
         return new ResponseEntity<>(new ResponseMessage("Note created successfully"), HttpStatus.OK);
     }
 

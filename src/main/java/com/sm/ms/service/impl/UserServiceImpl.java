@@ -2,8 +2,10 @@ package com.sm.ms.service.impl;
 
 import com.sm.ms.model.User;
 import com.sm.ms.repository.UserRepository;
+import com.sm.ms.security.services.UserPrinciple;
 import com.sm.ms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -55,6 +57,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByAuth() {
-        return null;
+        Object userPrinciple = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long user_id = ((UserPrinciple) userPrinciple).getId();
+        return findById(user_id);
     }
 }
