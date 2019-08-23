@@ -1,6 +1,6 @@
 package com.sm.ms.form.request;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 import javax.validation.constraints.Size;
 

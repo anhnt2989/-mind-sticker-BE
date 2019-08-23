@@ -1,6 +1,6 @@
 package com.sm.ms.model;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 @Table(name = "note")
 public class Note {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank

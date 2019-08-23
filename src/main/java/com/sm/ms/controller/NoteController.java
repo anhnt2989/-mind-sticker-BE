@@ -42,26 +42,26 @@ public class NoteController {
     @Autowired
     NoteServiceImpl noteService;
 
-    //Tạo note mới với quyền user - PM - ADMIN
-//    @RequestMapping(value = "/create-note", method = RequestMethod.POST, consumes = "multipart/form-data")
-//    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-//    public ResponseEntity<?> createNote(@ModelAttribute CreateNoteForm createNoteForm, HttpServletRequest request) {
-//        String jwts = authenticationJwtTokenFilter.getJwt(request);
-//        String userName = jwtProvider.getUserNameFromJwtToken(jwts);
-//        User user;
-//        try {
-//            user = userService.findByUsername(userName).orElseThrow(
-//                    () -> new UsernameNotFoundException("User Not Found with -> username or email : " + userName));
-//        } catch (UsernameNotFoundException exception) {
-//            return new ResponseEntity<>(new ResponseMessage(exception.getMessage()), HttpStatus.NOT_FOUND);
-//        }
-//
-//        Note note = new Note(createNoteForm.getTitle(), createNoteForm.getContent());
-//        note.setWriter(user);
-//        noteService.save(note);
+//    Tạo note mới với quyền user - PM - ADMIN
+    @RequestMapping(value = "/create-note", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+    public ResponseEntity<?> createNote(@ModelAttribute CreateNoteForm createNoteForm, HttpServletRequest request) {
+        String jwts = authenticationJwtTokenFilter.getJwt(request);
+        String userName = jwtProvider.getUserNameFromJwtToken(jwts);
+        User user;
+        try {
+            user = userService.findByUsername(userName).orElseThrow(
+                    () -> new UsernameNotFoundException("User Not Found with -> username or email : " + userName));
+        } catch (UsernameNotFoundException exception) {
+            return new ResponseEntity<>(new ResponseMessage(exception.getMessage()), HttpStatus.NOT_FOUND);
+        }
+
+        Note note = new Note(createNoteForm.getTitle(), createNoteForm.getContent());
+        note.setWriter(user);
+        noteService.save(note);
 //        Note noteTitle = noteService.findByTitle(createNoteForm.getTitle());
-//        return new ResponseEntity<>(new ResponseMessage("Note created successfully"), HttpStatus.OK);
-//    }
+        return new ResponseEntity<>(new ResponseMessage("Note created successfully"), HttpStatus.OK);
+    }
 
     //Hiển thị all notes với quyền PM - ADMIN
     @RequestMapping(value = "/", method = RequestMethod.GET)
