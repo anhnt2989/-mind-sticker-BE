@@ -112,7 +112,7 @@ public class AuthRestAPIs {
 //        multipartFileService.saveMultipartFile(saveLocation, signUpRequest.getAvatar(), avatarFileName);
 //
         userService.save(user);
-        emailSenderService.sendEmailCreateUser(user);
+//        emailSenderService.sendEmailCreateUser(user);
 
         return new ResponseEntity<>(new ResponseMessage("Please login your email to confirm"), HttpStatus.OK);
     }
