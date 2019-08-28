@@ -8,15 +8,15 @@ import java.util.Date;
 
 public class SignUpForm {
     @NotBlank
-    @Size(min = 3, max = 50)
+    @Size(min = 2, max = 50)
     private String firstName;
 
     @NotBlank
-    @Size(min = 3, max = 50)
+    @Size(min = 2, max = 50)
     private String lastName;
 
     @NotBlank
-    @Size(min = 3, max = 50)
+    @Size(min = 6, max = 50)
     private String username;
 
     @NotBlank

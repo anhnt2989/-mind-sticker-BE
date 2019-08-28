@@ -11,7 +11,7 @@ public class JwtResponse {
     private String avatarLink;
 
     public JwtResponse(String accessToken, String username, Collection<? extends GrantedAuthority> authorities, String avatarLink) {
-        this.token = accessToken;
+            this.token = accessToken;
         this.username = username;
         this.authorities = authorities;
         this.avatarLink = avatarLink;
