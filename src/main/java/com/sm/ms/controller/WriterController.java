@@ -63,7 +63,7 @@ public class WriterController {
     }
 
     @RequestMapping(value = "list-notes", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<List<Note>> listNotes() {
         List<Note> notes = noteService.findAll();
         if (notes.isEmpty()) {
@@ -72,8 +72,8 @@ public class WriterController {
         return new ResponseEntity<>(notes, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/note", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+    @RequestMapping(value = "/notes", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('OWNER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<List<Note>> listNoteByUser() {
         User user = userService.getUserByAuth();
         List<Note> notes = noteService.findAllByUser(user);
@@ -83,16 +83,16 @@ public class WriterController {
         return new ResponseEntity<>(notes, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-    public ResponseEntity<Note> getNote(@PathVariable("id") Long id) {
-        try {
-            Note note = noteService.findById(id);
-            return new ResponseEntity<Note>(note, HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity(new ResponseMessage(e.getMessage()), HttpStatus.NOT_FOUND);
-        }
-    }
+//    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+//    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+//    public ResponseEntity<Note> getNote(@PathVariable("id") Long id) {
+//        try {
+//            Note note = noteService.findById(id);
+//            return new ResponseEntity<Note>(note, HttpStatus.OK);
+//        } catch (EntityNotFoundException e) {
+//            return new ResponseEntity(new ResponseMessage(e.getMessage()), HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")

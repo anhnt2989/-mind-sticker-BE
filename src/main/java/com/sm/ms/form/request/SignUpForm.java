@@ -9,7 +9,11 @@ import java.util.Date;
 public class SignUpForm {
     @NotBlank
     @Size(min = 3, max = 50)
-    private String name;
+    private String firstName;
+
+    @NotBlank
+    @Size(min = 3, max = 50)
+    private String lastName;
 
     @NotBlank
     @Size(min = 3, max = 50)
@@ -45,12 +49,20 @@ public class SignUpForm {
     }
 
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getUsername() {

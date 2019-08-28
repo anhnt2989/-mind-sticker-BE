@@ -18,7 +18,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 
 
 @Configuration
@@ -62,12 +67,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 authorizeRequests()
                 .antMatchers("/api/auth/signin").permitAll()
                 .antMatchers("/api/auth/signup").permitAll()
+                .antMatchers("/api/owner/notes").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        //CORN
+        http.cors().configurationSource(new CorsConfigurationSource() {
+
+            @Override
+            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                CorsConfiguration config = new CorsConfiguration();
+                config.setAllowedHeaders(Collections.singletonList("*"));
+                config.setAllowedMethods(Collections.singletonList("*"));
+                config.addAllowedOrigin("*");
+                config.setAllowCredentials(true);
+                return config;
+            }
+        });
+
     }
 
     @Bean
@@ -79,5 +99,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         registrationBean.setFilter(characterEncodingFilter);
         return registrationBean;
     }
+
+
 
 }

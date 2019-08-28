@@ -25,7 +25,11 @@ public class User {
 
     @NotBlank
     @Size(min = 3, max = 50)
-    private String name;
+    private String firstName;
+
+    @NotBlank
+    @Size(min = 3, max = 50)
+    private String lastName;
 
     private boolean enabled;
 
@@ -83,8 +87,9 @@ public class User {
     public User() {
     }
 
-    public User(@NotBlank @Size(min = 3, max = 50) String name, @NotBlank @Size(min = 3, max = 50) String username, @NotBlank @Size(max = 50) @Email String email, Date birthday, String address, String phoneNumber, @NotBlank @Size(min = 6, max = 100) String password) {
-        this.name = name;
+    public User(@NotBlank @Size(min = 3, max = 50) String firstName,@NotBlank @Size(min = 3, max = 50) String lastName, @NotBlank @Size(min = 3, max = 50) String username, @NotBlank @Size(max = 50) @Email String email, Date birthday, String address, String phoneNumber, @NotBlank @Size(min = 6, max = 100) String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.username = username;
         this.email = email;
         this.birthday = birthday;
@@ -118,12 +123,20 @@ public class User {
         this.username = username;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
