@@ -80,11 +80,16 @@ public class WriterController {
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<?> deleteNote(@PathVariable("id") Long id) {
         try {
-            Note note = noteService.findById(id);
-            noteService.remove(id);
-            return new ResponseEntity<>(new ResponseMessage("Delete Note successfully"), HttpStatus.OK);
+            User user = userService.getUserByAuth();
+            User writer = noteService.findById(id).getWriter();
+            if (user.getId().equals(writer.getId())) {
+                Note note = noteService.findById(id);
+                noteService.remove(id);
+                return new ResponseEntity<>(new ResponseMessage("Delete Note successfully"), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new ResponseMessage("You are not writer of this note"), HttpStatus.FORBIDDEN);
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity(new ResponseMessage(e.getMessage()), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseMessage(e.getMessage()), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -96,7 +101,6 @@ public class WriterController {
             User user = userService.getUserByAuth();
             User owner = noteService.findById(id).getWriter();
             if (user.getId().equals(owner.getId())) {
-                note.setWriter(user);
                 currentNote.setTitle(note.getTitle());
                 currentNote.setTitle(note.getContent());
                 noteService.save(note);
