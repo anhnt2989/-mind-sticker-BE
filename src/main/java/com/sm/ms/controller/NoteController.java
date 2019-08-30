@@ -74,16 +74,6 @@ public class NoteController {
         return new ResponseEntity<>(notes, HttpStatus.OK);
     }
 
-    //Hiển thị all notes của 1 USER
-    @RequestMapping(value = "/user/{id}/", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('USER') and hasAuthority('WRITER')")
-    public ResponseEntity<List<Note>> listAllNotesByUserId(@PathVariable("id") Long id, @RequestBody User user) {
-        User currentUser = userService.findById(id);
-        user.getNotes();
-        List<Note> notes = noteService.findAllByUser(user);
-        return new ResponseEntity<>(notes, HttpStatus.OK);
-    }
-
     //Sửa 1 note với quyền PM - ADMIN
     @RequestMapping(value = "/note/{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('PM') or hasRole('ADMIN')")

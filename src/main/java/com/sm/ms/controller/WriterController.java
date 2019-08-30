@@ -75,16 +75,6 @@ public class WriterController {
         return new ResponseEntity<>(notes, HttpStatus.OK);
     }
 
-//    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-//    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-//    public ResponseEntity<Note> getNote(@PathVariable("id") Long id) {
-//        try {
-//            Note note = noteService.findById(id);
-//            return new ResponseEntity<Note>(note, HttpStatus.OK);
-//        } catch (EntityNotFoundException e) {
-//            return new ResponseEntity(new ResponseMessage(e.getMessage()), HttpStatus.NOT_FOUND);
-//        }
-//    }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
@@ -98,14 +88,17 @@ public class WriterController {
         }
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/note/{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<?> editNote(@PathVariable("id") Long id, @RequestBody Note note) {
+        Note currentNote = noteService.findById(id);
         try {
             User user = userService.getUserByAuth();
             User owner = noteService.findById(id).getWriter();
             if (user.getId().equals(owner.getId())) {
                 note.setWriter(user);
+                currentNote.setTitle(note.getTitle());
+                currentNote.setTitle(note.getContent());
                 noteService.save(note);
                 return new ResponseEntity<>(new ResponseMessage("Update Note successfully"), HttpStatus.OK);
             }
