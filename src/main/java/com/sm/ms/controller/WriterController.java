@@ -47,9 +47,10 @@ public class WriterController {
     @RequestMapping(value = "create-note", method = RequestMethod.POST)
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<?> createNote(@Valid @RequestBody CreateNoteForm createNoteForm) {
-        User user =
+        User user = userService.getUserByAuth();
         Note note = new Note(createNoteForm.getTitle(), createNoteForm.getContent());
-        note.setWriter();
+        note.setWriter(user);
+        noteService.save(note);
         return new ResponseEntity<>(new ResponseMessage("Note created successfully"), HttpStatus.OK);
     }
 
