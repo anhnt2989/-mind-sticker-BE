@@ -9,7 +9,7 @@ public class CreateNoteForm {
     @Size(min = 2, max = 50)
     private String title;
 
-    @NotBlank
+//    @NotBlank
     @Size(min = 4, max = 5000)
     private String content;
 

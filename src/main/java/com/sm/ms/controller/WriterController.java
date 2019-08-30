@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -45,20 +46,10 @@ public class WriterController {
 
     @RequestMapping(value = "create-note", method = RequestMethod.POST)
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-    public ResponseEntity<?> createNote(@ModelAttribute CreateNoteForm createNoteForm, HttpServletRequest request) {
-        User user;
-//        String jwts = authenticationJwtTokenFilter.getJwt(request);
-//        String userName = jwtProvider.getUserNameFromJwtToken(jwts);
-        try {
-            user = userService.getUserByAuth();
-        } catch (UsernameNotFoundException exception) {
-            return new ResponseEntity<>(new ResponseMessage(exception.getMessage()), HttpStatus.NOT_FOUND);
-        }
-
+    public ResponseEntity<?> createNote(@Valid @RequestBody CreateNoteForm createNoteForm) {
+        User user =
         Note note = new Note(createNoteForm.getTitle(), createNoteForm.getContent());
-        note.setWriter(user);
-        noteService.save(note);
-//        Note noteTitle = noteService.findByTitle(createNoteForm.getTitle());
+        note.setWriter();
         return new ResponseEntity<>(new ResponseMessage("Note created successfully"), HttpStatus.OK);
     }
 
@@ -73,7 +64,7 @@ public class WriterController {
     }
 
     @RequestMapping(value = "/notes", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('OWNER') or hasRole('PM') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<List<Note>> listNoteByUser() {
         User user = userService.getUserByAuth();
         List<Note> notes = noteService.findAllByUser(user);
