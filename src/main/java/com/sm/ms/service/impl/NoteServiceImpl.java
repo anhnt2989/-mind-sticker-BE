@@ -46,8 +46,8 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public void edit(Note currentNote, Note finallyNote) {
-        currentNote.setTitle(finallyNote.getTitle());
-        currentNote.setContent(finallyNote.getContent());
+    public void edit(Note currentNote, Note finalNote) {
+        currentNote.setTitle(finalNote.getTitle());
+        currentNote.setContent(finalNote.getContent());
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 public interface NoteService {
     void save(Note note);
 
-    void edit(Note currentNote, Note finallyNote);
+    void edit(Note currentNote, Note finalNote);
 
     List<Note> findAll();
 
