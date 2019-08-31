@@ -44,4 +44,10 @@ public class NoteServiceImpl implements NoteService {
     public Note findByTitle(String title) {
         return noteRepository.findByTitle(title);
     }
+
+    @Override
+    public void edit(Note currentNote, Note finallyNote) {
+        currentNote.setTitle(finallyNote.getTitle());
+        currentNote.setContent(finallyNote.getContent());
+    }
 }

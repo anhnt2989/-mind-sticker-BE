@@ -51,7 +51,6 @@ public class User {
     private String address;
 
     @Pattern(regexp = "0([0-9]{9,10})")
-    @Column(unique = true)
     private String phoneNumber;
 
     @NotBlank
@@ -63,6 +62,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
     @OneToMany( targetEntity = Note.class)
     private Set<Note> notes ;
 

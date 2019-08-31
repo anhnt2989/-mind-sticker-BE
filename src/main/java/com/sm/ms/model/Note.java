@@ -9,15 +9,13 @@ import javax.validation.constraints.Size;
 @Table(name = "note")
 public class Note {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
     @Size(min = 2, max = 50)
-    @Column(unique = true)
     private String title;
 
-    @NotBlank
     @Size(min = 2, max = 50)
     private String content;
 

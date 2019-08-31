@@ -94,17 +94,17 @@ public class WriterController {
     @RequestMapping(value = "/note/{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<?> editNote(@PathVariable("id") Long id, @RequestBody Note note) {
-        Note currentNote = noteService.findById(id);
         try {
             User user = userService.getUserByAuth();
-            User owner = noteService.findById(id).getWriter();
-            if (user.getId().equals(owner.getId())) {
-                currentNote.setTitle(note.getTitle());
-                currentNote.setTitle(note.getContent());
-                noteService.save(note);
+            User writer = noteService.findById(id).getWriter();
+            Note expectedNote = noteService.findById(id);
+            if (user.getId().equals(writer.getId())) {
+                noteService.edit(expectedNote, note);
+                noteService.save(expectedNote);
                 return new ResponseEntity<>(new ResponseMessage("Update Note successfully"), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ResponseMessage("You are not writer of this note"), HttpStatus.FORBIDDEN);
             }
-            return new ResponseEntity<>(new ResponseMessage("You are not writer of this note"), HttpStatus.FORBIDDEN);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(new ResponseMessage(e.getMessage()), HttpStatus.NOT_FOUND);
         }

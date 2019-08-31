@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface NoteRepository extends JpaRepository<Note, Long> {
-    Boolean existsByTitle(String title);
 
     Note findByTitle(String title);
 
