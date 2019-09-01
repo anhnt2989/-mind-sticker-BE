@@ -69,6 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/auth/signup").permitAll()
                 .antMatchers("/api/owner/notes").permitAll()
                 .antMatchers("/api/owner/create-note").permitAll()
+                .antMatchers("/api/owner/notes/all").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()

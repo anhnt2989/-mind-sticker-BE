@@ -1,6 +1,5 @@
 package com.sm.ms.controller;
 
-import com.sm.ms.form.request.CreateNoteForm;
 import com.sm.ms.form.response.ResponseMessage;
 import com.sm.ms.model.Note;
 import com.sm.ms.model.User;
@@ -13,13 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -67,39 +63,38 @@ public class WriterController {
     }
 
 
-//    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-//    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-//    public ResponseEntity<?> deleteNote(@PathVariable("id") Long id) {
-//        try {
-//            User user = userService.getUserByAuth();
-////            User writer = noteService.findById(id).getWriter();
-//            if (user.getId().equals(writer.getId())) {
-//                Note note = noteService.findById(id);
-//                noteService.remove(id);
-//                return new ResponseEntity<>(new ResponseMessage("Delete Note successfully"), HttpStatus.OK);
-//            }
-//            return new ResponseEntity<>(new ResponseMessage("You are not writer of this note"), HttpStatus.FORBIDDEN);
-//        } catch (EntityNotFoundException e) {
-//            return new ResponseEntity<>(new ResponseMessage(e.getMessage()), HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+    public ResponseEntity<?> deleteNote(@PathVariable("id") Long id) {
+        try {
+            User user = userService.getUserByAuth();
+            User writer = noteService.findById(id).getWriter();
+            if (user.getId().equals(writer.getId())) {
+                noteService.remove(id);
+                return new ResponseEntity<>(new ResponseMessage("Delete Note successfully"), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new ResponseMessage("You are not writer of this note"), HttpStatus.FORBIDDEN);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(new ResponseMessage(e.getMessage()), HttpStatus.NOT_FOUND);
+        }
+    }
 
-//    @RequestMapping(value = "/note/{id}", method = RequestMethod.PUT)
-//    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-//    public ResponseEntity<?> editNote(@PathVariable("id") Long id, @RequestBody Note note) {
-//        try {
-//            User user = userService.getUserByAuth();
-//            User writer = noteService.findById(id).getWriter();
-//            Note expectedNote = noteService.findById(id);
-//            if (user.getId().equals(writer.getId())) {
-//                noteService.edit(expectedNote, note);
-//                noteService.save(expectedNote);
-//                return new ResponseEntity<>(new ResponseMessage("Update Note successfully"), HttpStatus.OK);
-//            } else {
-//                return new ResponseEntity<>(new ResponseMessage("You are not writer of this note"), HttpStatus.FORBIDDEN);
-//            }
-//        } catch (EntityNotFoundException e) {
-//            return new ResponseEntity<>(new ResponseMessage(e.getMessage()), HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @RequestMapping(value = "/note/{id}", method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+    public ResponseEntity<?> editNote(@PathVariable("id") Long id, @RequestBody Note note) {
+        try {
+            User user = userService.getUserByAuth();
+            User writer = noteService.findById(id).getWriter();
+            Note expectedNote = noteService.findById(id);
+            if (user.getId().equals(writer.getId())) {
+                noteService.edit(expectedNote, note);
+                noteService.save(expectedNote);
+                return new ResponseEntity<>(new ResponseMessage("Update Note successfully"), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ResponseMessage("You are not writer of this note"), HttpStatus.FORBIDDEN);
+            }
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(new ResponseMessage(e.getMessage()), HttpStatus.NOT_FOUND);
+        }
+    }
 }
