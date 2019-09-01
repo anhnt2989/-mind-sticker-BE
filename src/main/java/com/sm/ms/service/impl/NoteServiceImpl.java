@@ -35,10 +35,10 @@ public class NoteServiceImpl implements NoteService {
         return noteRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
-//    @Override
-//    public List<Note> findAllByUser(User user) {
-//        return noteRepository.findAllByWriter(user);
-//    }
+    @Override
+    public List<Note> findAllByUser(User user) {
+        return noteRepository.findAllByWriter(user);
+    }
 
     @Override
     public Note findByTitle(String title) {

@@ -1,7 +1,5 @@
 package com.sm.ms.model;
 
-import javax.validation.constraints.NotBlank;
-
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
@@ -12,30 +10,29 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(min = 2, max = 50)
+    @Size(max = 50)
     private String title;
 
-    @Size(min = 2, max = 5000)
+    @Size(max = 5000)
     private String content;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User writer;
-//
-//    public User getWriter() {
-//        return writer;
-//    }
-//
-//    public void setWriter(User writer) {
-//        this.writer = writer;
-//    }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User writer;
+
+    public User getWriter() {
+        return writer;
+    }
+
+    public void setWriter(User writer) {
+        this.writer = writer;
+    }
 
     public Note() {
     }
 
-    public Note(@NotBlank @Size(min = 2, max = 50) String title,
-                @NotBlank @Size(min = 2, max = 50) String content) {
+    public Note(@Size(max = 50) String title,
+                @Size(max = 50) String content) {
         this.title = title;
         this.content = content;
     }

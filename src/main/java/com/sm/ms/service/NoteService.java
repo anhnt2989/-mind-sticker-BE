@@ -19,6 +19,6 @@ public interface NoteService {
 
     void remove(Long id);
 
-//    List<Note> findAllByUser(User user);
+    List<Note> findAllByUser(User user);
 
 }

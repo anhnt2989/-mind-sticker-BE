@@ -13,10 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -45,33 +47,24 @@ public class WriterController {
     @RequestMapping(value = "/create-note", method = RequestMethod.POST)
 //    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<Note> createNote(@RequestBody Note note) {
-//        User user = userService.getUserByAuth();
 //        Note note = new Note(createNoteForm.getTitle(), createNoteForm.getContent());
 //        note.setWriter(user);
+//        Note note = new Note(createNoteForm.getTitle(), createNoteForm.getContent());
         noteService.save(note);
         return new ResponseEntity<Note>(note, HttpStatus.OK);
     }
 
-//    @RequestMapping(value = "/list-notes", method = RequestMethod.GET)
-//    @PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
-//    public ResponseEntity<List<Note>> listNotes() {
-//        List<Note> notes = noteService.findAll();
-//        if (notes.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        }
-//        return new ResponseEntity<>(notes, HttpStatus.OK);
-//    }
 
-//    @RequestMapping(value = "/notes", method = RequestMethod.GET)
-//    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-//    public ResponseEntity<List<Note>> listNoteByUser() {
-//        User user = userService.getUserByAuth();
-//        List<Note> notes = noteService.findAllByUser(user);
-//        if (notes.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        }
-//        return new ResponseEntity<>(notes, HttpStatus.OK);
-//    }
+    @RequestMapping(value = "/notes/all", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+    public ResponseEntity<List<Note>> listNoteByUser() {
+        User user = userService.getUserByAuth();
+        List<Note> notes = noteService.findAllByUser(user);
+        if (notes.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(notes, HttpStatus.OK);
+    }
 
 
 //    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

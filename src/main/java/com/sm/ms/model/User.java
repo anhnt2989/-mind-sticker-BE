@@ -63,16 +63,16 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany( targetEntity = Note.class)
-    private Set<Note> notes ;
-
-    public Set<Note> getNotes() {
-        return notes;
-    }
-
-    public void setNotes(Set<Note> notes) {
-        this.notes = notes;
-    }
+//    @OneToMany( targetEntity = Note.class)
+//    private Set<Note> notes ;
+//
+//    public Set<Note> getNotes() {
+//        return notes;
+//    }
+//
+//    public void setNotes(Set<Note> notes) {
+//        this.notes = notes;
+//    }
 
     private String avatarFileName;
 

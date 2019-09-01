@@ -12,5 +12,5 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 
     Note findByTitle(String title);
 
-//    List<Note> findAllByWriter(User user);
+    List<Note> findAllByWriter(User user);
 }

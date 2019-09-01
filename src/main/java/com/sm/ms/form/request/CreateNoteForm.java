@@ -5,12 +5,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public class CreateNoteForm {
-    @NotBlank
-    @Size(min = 2, max = 50)
+    @Size(max = 50)
     private String title;
 
-//    @NotBlank
-    @Size(min = 4, max = 5000)
+    @Size(max = 5000)
     private String content;
 
     public String getTitle() {
