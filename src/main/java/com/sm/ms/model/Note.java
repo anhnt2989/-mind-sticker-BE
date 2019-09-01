@@ -19,17 +19,17 @@ public class Note {
     @Size(min = 2, max = 5000)
     private String content;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User writer;
-
-    public User getWriter() {
-        return writer;
-    }
-
-    public void setWriter(User writer) {
-        this.writer = writer;
-    }
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private User writer;
+//
+//    public User getWriter() {
+//        return writer;
+//    }
+//
+//    public void setWriter(User writer) {
+//        this.writer = writer;
+//    }
 
     public Note() {
     }
