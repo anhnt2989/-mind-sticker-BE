@@ -51,6 +51,13 @@ public class WriterController {
         return new ResponseEntity<Note>(note, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/notes/{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+    public ResponseEntity<Note> getNoteById(@PathVariable("id") Long id) {
+        Note note = noteService.findById(id);
+        return new ResponseEntity<Note>(note, HttpStatus.OK);
+    }
+
 
     @RequestMapping(value = "/notes/all", method = RequestMethod.GET)
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
