@@ -36,8 +36,8 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> findAllByUser(User user) {
-        return noteRepository.findAllByWriter(user);
+    public List<Note> findAllByUsername(String username) {
+        return noteRepository.findAllByWriterUsername(username);
     }
 
     @Override

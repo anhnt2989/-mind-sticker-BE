@@ -1,5 +1,6 @@
 package com.sm.ms.controller;
 
+import com.sm.ms.form.request.CreateNoteForm;
 import com.sm.ms.form.response.ResponseMessage;
 import com.sm.ms.model.Note;
 import com.sm.ms.model.User;
@@ -41,11 +42,11 @@ public class WriterController {
     NoteService noteService;
 
     @RequestMapping(value = "/create-note", method = RequestMethod.POST)
-//    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
-    public ResponseEntity<Note> createNote(@RequestBody Note note) {
-//        Note note = new Note(createNoteForm.getTitle(), createNoteForm.getContent());
-//        note.setWriter(user);
-//        Note note = new Note(createNoteForm.getTitle(), createNoteForm.getContent());
+    @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
+    public ResponseEntity<Note> createNote(@RequestBody CreateNoteForm createNoteForm) {
+        User user = userService.getUserByAuth();
+        Note note = new Note(createNoteForm.getTitle(), createNoteForm.getContent());
+        note.setWriter(user);
         noteService.save(note);
         return new ResponseEntity<Note>(note, HttpStatus.OK);
     }
@@ -55,7 +56,7 @@ public class WriterController {
     @PreAuthorize("hasRole('USER') or hasRole('PM') or hasRole('ADMIN')")
     public ResponseEntity<List<Note>> listNoteByUser() {
         User user = userService.getUserByAuth();
-        List<Note> notes = noteService.findAllByUser(user);
+        List<Note> notes = noteService.findAllByUsername(user.getUsername());
         if (notes.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

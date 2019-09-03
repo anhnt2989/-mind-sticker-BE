@@ -1,7 +1,9 @@
 package com.sm.ms.service;
 
+import com.sm.ms.model.Note;
 import com.sm.ms.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
