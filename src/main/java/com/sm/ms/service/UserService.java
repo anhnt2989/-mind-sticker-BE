@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface UserService {
     Optional<User> findByUsername(String username);
 
+    List<User> findAll();
+
     User findByPhoneNumber(String phoneNumber);
 
     Boolean existsByUsername(String username);
