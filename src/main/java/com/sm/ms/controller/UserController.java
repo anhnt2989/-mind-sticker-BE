@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.List;
 
 @Controller
+@RequestMapping("/api")
 public class UserController {
 
     @Autowired
@@ -45,7 +46,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('GUEST') or hasRole('HOST') or hasRole('ADMIN') or hasRole('PM')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('PM')")
     public ResponseEntity<List<User>> listAllUser() {
         List<User> users = this.userService.findAll();
         if (users.isEmpty()) {
@@ -55,7 +56,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/updateCurrent", method = RequestMethod.PUT)
-    @PreAuthorize("hasRole('GUEST') or hasRole('HOST') or hasRole('ADMIN') or hasRole('PM')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('PM')")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         User currentUser = userService.findById(getCurrentUser().getId());
 
@@ -70,14 +71,14 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/Current", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('GUEST') or hasRole('HOST') or hasRole('ADMIN') or hasRole('PM')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('PM')")
     public ResponseEntity<User> getUserById() {
         User user = userService.findById(getCurrentUser().getId());
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/user/confirmPassword", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('GUEST') or hasRole('HOST') or hasRole('ADMIN') or hasRole('PM')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('PM')")
     public ResponseEntity<ResponseMessage> comparePassword(@RequestBody String password) throws Exception {
         try {
             Authentication authentication = authenticationManager.authenticate(
